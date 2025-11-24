@@ -5,15 +5,11 @@ on:
     branches:
       - main
     paths:
-      # Vì package.json ở ngoài, nên theo dõi cả file root và folder frontend
       - 'frontend/**'
-      - 'src/**'        # Nếu source code FE của bạn nằm ở src
-      - 'package.json'
-      - 'package-lock.json'
 
 jobs:
   web-deploy:
-    name: Deploy FE to Hosting 1
+    name: Deploy FE to Hosting
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
@@ -22,10 +18,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Hoặc version bạn đang dùng
+          node-version: '18'
       
-      # Bước này chạy ngay tại thư mục gốc vì package.json nằm ở gốc
+      # QUAN TRỌNG: Thêm dòng working-directory để nó chui vào folder frontend mới chạy lệnh
       - name: Install and Build
+        working-directory: ./frontend 
         run: |
           npm install
           npm run build
@@ -33,11 +30,11 @@ jobs:
       - name: Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FE_FTP_SERVER }}
+          server: ${{ secrets.FE_FTP_HOST }}
           username: ${{ secrets.FE_FTP_USERNAME }}
           password: ${{ secrets.FE_FTP_PASSWORD }}
-          # QUAN TRỌNG: Kiểm tra xem folder build ra tên là 'dist' hay 'build'
-          local-dir: ./dist/ 
-          server-dir: ./public_html/ 
-          protocol: ftp # Hoặc ftps
-          dangerous-clean-slate: true # Xóa code cũ trên host để tránh xung đột file
+          # Đường dẫn này ghép từ: thư mục 'frontend' + thư mục 'dist' vừa tạo ra
+          local-dir: ./frontend/dist/ 
+          server-dir: ./public_html/
+          protocol: ftp
+          security: loose

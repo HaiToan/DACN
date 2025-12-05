@@ -1,0 +1,40 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  web-deploy:
+    name: Deploy FE to Hosting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      # QUAN TRỌNG: Thêm dòng working-directory để nó chui vào folder frontend mới chạy lệnh
+      - name: Install and Build
+        working-directory: ./frontend 
+        run: |
+          npm install
+          npm run build
+      
+      - name: Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FE_FTP_HOST }}
+          username: ${{ secrets.FE_FTP_USERNAME }}
+          password: ${{ secrets.FE_FTP_PASSWORD }}
+          # Đường dẫn này ghép từ: thư mục 'frontend' + thư mục 'dist' vừa tạo ra
+          local-dir: ./frontend/dist/ 
+          server-dir: ./public_html/
+          protocol: ftp
+          security: loose

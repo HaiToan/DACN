@@ -1,11 +1,15 @@
-import mongoose from 'mongoose';
+// config/db.js
 
-export const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_CONNECTIONSTRING);
-    console.log("Kết nối đến MongoDB thành công");
-  }catch(error){
-    console.error("Kết nối đến MongoDB thất bại",error);
-    process.exit(1);
-  }
-};
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+});
+
+export { pool }; // Xuất pool để sử dụng và kiểm tra kết nối trong server.js

@@ -7,6 +7,7 @@ import {
   Users,
   Clock,
   Phone,
+  FileText,
 } from "lucide-react";
 // import axios from "axios"; // Tạm tắt API để dùng dữ liệu giả
 
@@ -329,46 +330,41 @@ const MainHome = () => {
 
           <div className="w-full lg:w-1/2 bg-white p-8 rounded-xl shadow-2xl">
             <h3 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-              Thông Tin Đặt Chỗ
+              Thông Tin Đặt Bàn
             </h3>
 
             <form action="/booking" method="POST" className="space-y-5">
               <div className="flex gap-4">
                 <div className="flex-1 relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Ngày</label>
-                  <div className="relative">
-                    <input type="date" name="date" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 appearance-none" required />
-                    <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                  </div>
+                  <input type="date" name="date" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition" required />
                 </div>
                 <div className="flex-1 relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Giờ</label>
-                  <div className="relative">
-                    <input type="time" name="time" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 appearance-none" required />
-                    <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                  </div>
+                  <input type="time" name="time" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition" required />
                 </div>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Số lượng khách</label>
-                <div className="relative">
-                  <select name="guests" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 appearance-none" required>
-                    <option value="">Chọn số lượng</option>
-                    <option value="1-2">1 - 2 người</option>
-                    <option value="3-4">3 - 4 người</option>
-                    <option value="5-8">5 - 8 người</option>
-                  </select>
-                  <Users className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                </div>
+                <select name="guests" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition appearance-none" required>
+                  <option value="">Chọn số lượng</option>
+                  <option value="1-2">1 - 2 người</option>
+                  <option value="3-4">3 - 4 người</option>
+                  <option value="5-8">5 - 8 người</option>
+                </select>
               </div>
               <div>
                  <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên</label>
-                 <input type="text" name="name" placeholder="Nguyễn Văn A" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" required />
+                 <input type="text" name="name" placeholder="Nguyễn Văn A" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition" required />
               </div>
               <div>
                  <label className="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
-                 <input type="tel" name="phone" placeholder="(+84) 901 234 567" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" required />
+                 <input type="tel" name="phone" placeholder="(+84) 901 234 567" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Ghi chú thêm</label>
+                <textarea name="notes" rows="2" placeholder="Ví dụ: Bàn gần cửa sổ, dị ứng..." className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition resize-none"></textarea>
               </div>
               <button type="submit" className="w-full py-4 bg-yellow-500 text-white text-xl font-bold rounded-lg hover:bg-yellow-600 transition shadow-lg mt-4">
                 Xác Nhận Đặt Bàn

@@ -1,8 +1,9 @@
-// App.jsx (Đã Cập Nhật Logic Bảo Vệ Route)
+// App.jsx (Đã Cập Nhật Logic Bảo Vệ Route và Admin Panel)
 
 import React from 'react';
-// 💡 CẬP NHẬT: Thay thế BrowserRouter bằng Router để khớp với JSX
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop'; 
+import { CartProvider } from './context/CartContext';
 
 // Import các trang chính từ thư mục pages
 import MainHome from './pages/MainHome';
@@ -10,66 +11,122 @@ import Menu from './pages/Menu';
 import About from './pages/About';
 import Booking from './pages/Booking';
 import Cart from './pages/Cart';
-import Orders from './pages/Orders';
+import Checkout from './pages/Checkout'; // Import Checkout page
+import BookingHistory from './pages/BookingHistory';
+import OrderHistory from './pages/OrderHistory';
 import Feedback from './pages/Feedback';
 import Contact from './pages/Contact';
 import AuthPage from './pages/AuthPage'; 
 import NotFound from './pages/NotFound';
 import Promo from './pages/Promo';
+import Profile from './pages/Profile';
+import ChangePasswordPage from './pages/ChangePasswordPage';
 
-// Import component bảo vệ
+// Import components bảo vệ và layout
 import ProtectedRoute from './components/ProtectedRoute'; 
+import AdminRoute from './components/AdminRoute';
+import AdminLayout from './components/AdminLayout';
+
+// Import các trang admin
+import AdminMenu from './pages/admin/AdminMenu';
+import AdminBookings from './pages/admin/AdminBookings';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminOrders from './pages/admin/AdminOrders'; // Import AdminOrders
+
 
 
 function App() {
   return (
-    <Router>
-      {/* Tất cả các Route không được bảo vệ đều là public access (truy cập công khai).
-        Các Route được bảo vệ (như /booking) yêu cầu người dùng phải đăng nhập.
-      */}
-      <Routes>
-        
-        {/* Đường dẫn công cộng (Public Routes) */}
-        <Route path="/" element={<MainHome />} /> 
-        <Route path="/menu" element={<Menu />} /> 
-        <Route path="/about" element={<About />} />
-        <Route path="/cart" element={<Cart />} /> 
-        <Route path="/reviews" element={<Feedback />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/promo" element={<Promo />} />
-        <Route path="/booking" element={<Booking />} />
-        {/* Đường dẫn Xác thực (Auth Route) */}
-        {/* Chuẩn hóa về một đường dẫn /auth trỏ tới component AuthPage */}
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/login" element={<AuthPage />} /> {/* Vẫn giữ /login redirect về /auth */}
-        
-        
-        {/* 🛡️ ĐƯỜNG DẪN ĐƯỢC BẢO VỆ (Protected Routes) */}
-        
-        {/* 💡 Yêu cầu: Đặt bàn phải đăng nhập trước. Bọc Booking trong ProtectedRoute. */}
-        <Route 
-          path="/booking" 
-          element={
-            <ProtectedRoute>
-              <Booking /> {/* Chỉ hiện Booking nếu đã đăng nhập */}
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Ví dụ: Đơn hàng cũng thường cần bảo vệ */}
-        <Route 
-          path="/orders" 
-          element={
-            <ProtectedRoute>
-              <Orders /> 
-            </ProtectedRoute>
-          } 
-        />
+    <CartProvider> {/* CartProvider should wrap the Router */}
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          
+          {/* Đường dẫn công cộng (Public Routes) */}
+          <Route path="/" element={<MainHome />} /> 
+          <Route path="/menu" element={<Menu />} /> 
+          <Route path="/about" element={<About />} />
+          <Route path="/cart" element={<Cart />} /> 
+          <Route path="/reviews" element={<Feedback />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/promo" element={<Promo />} />
+          
+          {/* Đường dẫn Xác thực (Auth Route) */}
+          <Route path="/auth" element={<AuthPage />} />
+          
+          {/* 🛡️ ĐƯỜNG DẪN ĐƯỢC BẢO VỆ (Protected Routes for Customers) */}
+          <Route 
+            path="/booking" 
+            element={
+              <ProtectedRoute>
+                <Booking />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/booking-history" 
+            element={
+              <ProtectedRoute>
+                <BookingHistory /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/order-history" 
+            element={
+              <ProtectedRoute>
+                <OrderHistory />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/change-password" 
+            element={
+              <ProtectedRoute>
+                <ChangePasswordPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/checkout" 
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            } 
+          />
 
-        {/* Đường dẫn mặc định khi không tìm thấy */}
-        <Route path="*" element={<NotFound />} /> 
-      </Routes>
-    </Router>
+
+          {/* 🛡️ ĐƯỜNG DẪN ADMIN (Protected Admin Routes) */}
+          <Route 
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            {/* Trang mặc định khi vào /admin */}
+            <Route index element={<AdminMenu />} /> 
+            <Route path="menu" element={<AdminMenu />} />
+            <Route path="bookings" element={<AdminBookings />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="orders" element={<AdminOrders />} />
+          </Route>
+
+          {/* Đường dẫn mặc định khi không tìm thấy */}
+          <Route path="*" element={<NotFound />} /> 
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

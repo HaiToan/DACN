@@ -34,9 +34,9 @@ const About = () => {
             Trải nghiệm ẩm thực đỉnh cao với nguyên liệu tươi ngon và không gian
             sang trọng tại Beef Bistro.
           </p>
-          <button className="bg-yellow-600 text-white px-8 py-3 rounded-full hover:bg-yellow-700 transition font-bold shadow-lg uppercase tracking-wider transform hover:scale-105 duration-300">
+          <Link to="/menu" className="bg-yellow-600 text-white px-8 py-3 rounded-full hover:bg-yellow-700 transition font-bold shadow-lg uppercase tracking-wider transform hover:scale-105 duration-300">
             Xem Thực Đơn
-          </button>
+          </Link>
         </div>
       </section>
 

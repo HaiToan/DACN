@@ -50,10 +50,19 @@ export const optionalAuth = (req, res, next) => {
 
 
 // Middleware to check if the user is an admin
-export const admin = (req, res, next) => {
+export const adminOnly = (req, res, next) => {
     if (req.user && req.user.role === 'Admin') {
         next();
     } else {
         return res.status(403).json({ message: 'Không có quyền truy cập, yêu cầu vai trò Admin.' });
+    }
+};
+
+// Middleware to check if the user is an employee or admin
+export const employeeOrAdmin = (req, res, next) => {
+    if (req.user && (req.user.role === 'NhanVien' || req.user.role === 'Admin')) {
+        next();
+    } else {
+        return res.status(403).json({ message: 'Không có quyền truy cập, yêu cầu vai trò Nhân Viên hoặc Admin.' });
     }
 };

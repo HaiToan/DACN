@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, admin, optionalAuth } from '../middleware/authMiddleware.js';
+import { verifyToken, adminOnly, optionalAuth, employeeOrAdmin } from '../middleware/authMiddleware.js';
 import { 
     createBooking, 
     getBookingById, 
@@ -12,10 +12,10 @@ import {
 
 const router = express.Router();
 
-// @desc    Lấy tất cả các đặt bàn (Admin)
+// @desc    Lấy tất cả các đặt bàn (Admin/Employee)
 // @route   GET /api/bookings
-// @access  Private/Admin
-router.get('/', verifyToken, admin, getAllBookings);
+// @access  Private/Admin/Employee
+router.get('/', verifyToken, employeeOrAdmin, getAllBookings);
 
 // @desc    Lấy tất cả các đặt bàn của một người dùng
 // @route   GET /api/bookings/mybookings
@@ -30,7 +30,7 @@ router.post('/', optionalAuth, createBooking);
 // @desc    Cập nhật trạng thái đặt bàn (Admin)
 // @route   PUT /api/bookings/:id/status
 // @access  Private/Admin
-router.put('/:id/status', verifyToken, admin, updateBookingStatus);
+router.put('/:id/status', verifyToken, employeeOrAdmin, updateBookingStatus);
 
 // @desc    Lấy đặt bàn theo ID
 // @route   GET /api/bookings/:id

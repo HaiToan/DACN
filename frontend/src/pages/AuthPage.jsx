@@ -120,6 +120,8 @@ const AuthPage = () => {
         // Redirect based on role
         if (data.role === "Admin") {
           navigate("/admin/menu", { replace: true });
+        } else if (data.role === "NhanVien") {
+          navigate("/employee/bookings", { replace: true });
         } else {
           navigate(redirectPath, { replace: true });
         }

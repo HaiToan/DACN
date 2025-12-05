@@ -6,6 +6,7 @@ import { LogOut, KeyRound, UserCircle } from "lucide-react";
 const AdminHeader = () => {
   const navigate = useNavigate();
   const username = localStorage.getItem("username") || "Admin";
+  const userRole = localStorage.getItem("userRole"); // Get user role
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,46 +32,54 @@ const AdminHeader = () => {
 
         {/* Navigation */}
         <nav className="flex items-center space-x-6">
-          <NavLink
-            to="/admin/menu"
-            className={({ isActive }) =>
-              `text-lg font-medium transition hover:text-yellow-400 ${
-                isActive ? "text-yellow-400" : "text-gray-300"
-              }`
-            }
-          >
-            Thực đơn
-          </NavLink>
-          <NavLink
-            to="/admin/bookings"
-            className={({ isActive }) =>
-              `text-lg font-medium transition hover:text-yellow-400 ${
-                isActive ? "text-yellow-400" : "text-gray-300"
-              }`
-            }
-          >
-            Đặt bàn
-          </NavLink>
-          <NavLink
-            to="/admin/users"
-            className={({ isActive }) =>
-              `text-lg font-medium transition hover:text-yellow-400 ${
-                isActive ? "text-yellow-400" : "text-gray-300"
-              }`
-            }
-          >
-            Người dùng
-          </NavLink>
-          <NavLink
-            to="/admin/orders"
-            className={({ isActive }) =>
-              `text-lg font-medium transition hover:text-yellow-400 ${
-                isActive ? "text-yellow-400" : "text-gray-300"
-              }`
-            }
-          >
-            Đơn hàng
-          </NavLink>
+          {(userRole === "Admin" || userRole === "NhanVien") && (
+            <NavLink
+              to={userRole === "NhanVien" ? "/employee/bookings" : "/admin/bookings"}
+              className={({ isActive }) =>
+                `text-lg font-medium transition hover:text-yellow-400 ${
+                  isActive ? "text-yellow-400" : "text-gray-300"
+                }`
+              }
+            >
+              Đặt bàn
+            </NavLink>
+          )}
+          {(userRole === "Admin" || userRole === "NhanVien") && (
+            <NavLink
+              to={userRole === "NhanVien" ? "/employee/orders" : "/admin/orders"}
+              className={({ isActive }) =>
+                `text-lg font-medium transition hover:text-yellow-400 ${
+                  isActive ? "text-yellow-400" : "text-gray-300"
+                }`
+              }
+            >
+              Đơn hàng
+            </NavLink>
+          )}
+          {userRole === "Admin" && (
+            <NavLink
+              to="/admin/menu"
+              className={({ isActive }) =>
+                `text-lg font-medium transition hover:text-yellow-400 ${
+                  isActive ? "text-yellow-400" : "text-gray-300"
+                }`
+              }
+            >
+              Thực đơn
+            </NavLink>
+          )}
+          {userRole === "Admin" && (
+            <NavLink
+              to="/admin/users"
+              className={({ isActive }) =>
+                `text-lg font-medium transition hover:text-yellow-400 ${
+                  isActive ? "text-yellow-400" : "text-gray-300"
+                }`
+              }
+            >
+              Người dùng
+            </NavLink>
+          )}
         </nav>
 
         {/* User Dropdown */}

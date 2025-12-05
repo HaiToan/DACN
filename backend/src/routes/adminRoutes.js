@@ -10,23 +10,24 @@ import {
     deleteOrder,
     updateOrderStatus,
 } from "../controllers/adminController.js";
-import { verifyToken, admin } from "../middleware/authMiddleware.js"; // Import middleware
+import { verifyToken, adminOnly, employeeOrAdmin } from "../middleware/authMiddleware.js"; // Import middleware
 
 const router = express.Router();
 
 // Áp dụng middleware cho tất cả các route trong file này
-router.use(verifyToken, admin);
+router.use(verifyToken); // Verify token for all admin routes, then apply specific role checks
 
-router.route("/users").get(getUsers);
-router.route("/users/:id").delete(deleteUser).put(updateUser);
+// User management routes (Admin Only)
+router.route("/users").get(adminOnly, getUsers);
+router.route("/users/:id").delete(adminOnly, deleteUser).put(adminOnly, updateUser);
 
-// Booking management routes for admin
-router.route("/bookings").get(getAllBookings); // Get all bookings
-router.route("/bookings/:id").put(updateBookingByAdmin).delete(deleteBookingByAdmin); // Update/Delete a specific booking
+// Booking management routes (Employee or Admin)
+router.route("/bookings").get(employeeOrAdmin, getAllBookings); // Get all bookings
+router.route("/bookings/:id").put(employeeOrAdmin, updateBookingByAdmin).delete(employeeOrAdmin, deleteBookingByAdmin); // Update/Delete a specific booking
 
-// Order management routes for admin
-router.route("/orders").get(getAllOrders);
-router.route("/orders/:madh").delete(deleteOrder);
-router.route("/orders/:madh/status").put(updateOrderStatus);
+// Order management routes (Employee or Admin)
+router.route("/orders").get(employeeOrAdmin, getAllOrders);
+router.route("/orders/:madh").delete(employeeOrAdmin, deleteOrder);
+router.route("/orders/:madh/status").put(employeeOrAdmin, updateOrderStatus);
 
 export default router;

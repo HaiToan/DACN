@@ -47,7 +47,11 @@ const Menu = () => {
           gia: parseFloat(item.gia), 
         }));
         setMenuItems(formattedMenu);
-        setCategories([{ maloai: "ALL", tenloai: "TẤT CẢ" }, ...catData]);
+        console.log("Menu Items after fetch (first item's maloai type):", typeof formattedMenu[0]?.maloai, formattedMenu[0]?.maloai);
+
+        const categoriesWithAll = [{ maloai: "ALL", tenloai: "TẤT CẢ" }, ...catData];
+        setCategories(categoriesWithAll);
+        console.log("Categories after fetch (first category's maloai type, excluding ALL):", typeof catData[0]?.maloai, catData[0]?.maloai);
 
       } catch (e) {
         setToast({ message: `Lỗi khi tải dữ liệu: ${e.message}`, type: 'error', isVisible: true });
@@ -76,9 +80,14 @@ const Menu = () => {
 
   const filteredItems = useMemo(() => {
     let items = menuItems;
+    console.log("Filtering: activeCategory:", activeCategory, " (type: ", typeof activeCategory, ")");
 
     if (activeCategory !== "ALL") {
-      items = items.filter(item => item.maloai === activeCategory);
+      items = items.filter(item => {
+        // Đảm bảo so sánh giữa hai chuỗi để tránh lỗi không khớp kiểu
+        console.log("  Item maloai:", item.maloai, " (type: ", typeof item.maloai, ") - activeCategory:", activeCategory, " (type: ", typeof activeCategory, ") - Match?", String(item.maloai) === String(activeCategory));
+        return String(item.maloai) === String(activeCategory);
+      });
     }
 
     if (searchTerm) {

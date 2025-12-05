@@ -25,6 +25,7 @@ import ChangePasswordPage from './pages/ChangePasswordPage';
 // Import components bảo vệ và layout
 import ProtectedRoute from './components/ProtectedRoute'; 
 import AdminRoute from './components/AdminRoute';
+import EmployeeRoute from './components/EmployeeRoute'; // Import EmployeeRoute
 import AdminLayout from './components/AdminLayout';
 
 // Import các trang admin
@@ -105,23 +106,37 @@ function App() {
           />
 
 
-          {/* 🛡️ ĐƯỜNG DẪN ADMIN (Protected Admin Routes) */}
-          <Route 
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-          >
-            {/* Trang mặc định khi vào /admin */}
-            <Route index element={<AdminMenu />} /> 
-            <Route path="menu" element={<AdminMenu />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="orders" element={<AdminOrders />} />
-          </Route>
-
+                    {/* 🛡️ ĐƯỜNG DẪN ADMIN (Protected Admin Routes) */}
+                    <Route
+                      path="/admin"
+                      element={
+                        <AdminRoute>
+                          <AdminLayout />
+                        </AdminRoute>
+                      }
+                    >
+                      {/* Trang mặc định khi vào /admin */}
+                      <Route index element={<AdminMenu />} />
+                      <Route path="menu" element={<AdminMenu />} />
+                      <Route path="bookings" element={<AdminBookings />} />
+                      <Route path="users" element={<AdminUsers />} />
+                      <Route path="orders" element={<AdminOrders />} />
+                    </Route>
+          
+                    {/* 🛡️ ĐƯỜNG DẪN NHÂN VIÊN (Protected Employee Routes) */}
+                    <Route
+                      path="/employee"
+                      element={
+                        <EmployeeRoute>
+                          <AdminLayout /> {/* Re-use AdminLayout for consistency, it will adjust navigation based on role */}
+                        </EmployeeRoute>
+                      }
+                    >
+                      {/* Trang mặc định khi vào /employee */}
+                      <Route index element={<AdminBookings />} /> {/* Employee sees bookings by default */}
+                      <Route path="bookings" element={<AdminBookings />} />
+                      <Route path="orders" element={<AdminOrders />} />
+                    </Route>
           {/* Đường dẫn mặc định khi không tìm thấy */}
           <Route path="*" element={<NotFound />} /> 
         </Routes>

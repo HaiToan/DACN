@@ -2,14 +2,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from '../context/CartContext';
-import { LogOut, UserCircle, Edit, KeyRound, ReceiptText, ShoppingCart, XCircle, Calendar } from 'lucide-react'; // Import các icon
-
+import { LogOut, UserCircle, Edit, KeyRound, ReceiptText, ShoppingCart, XCircle, Calendar } from 'lucide-react'; 
 const Header = () => {
   const { getTotalItems, getCartTotal, cartItems, removeItem } = useCart();
-  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false); // State for mini-cart visibility
-  const hoverTimeout = useRef(null); // Ref to store the timeout ID
+  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+  const hoverTimeout = useRef(null);
 
-  // --- 1. TRẠNG THÁI & HOOKS ---
+  // RẠNG THÁI & HOOKS 
   const navigate = useNavigate();
   const [headerVisible, setHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -31,7 +30,7 @@ const Header = () => {
     
     if (token && (storedHoten || storedUsername)) {
       setIsLoggedIn(true);
-      setHoten(storedHoten || storedUsername); // Sử dụng họ tên, dự phòng là tên người dùng
+      setHoten(storedHoten || storedUsername); 
     } else {
       setIsLoggedIn(false);
       setHoten('');
@@ -215,7 +214,7 @@ const Header = () => {
                 key={idx} 
                 to={cat.link} 
                 className="block px-4 py-2 text-base text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition rounded font-medium"
-                onClick={() => setIsMenuOpen(false)} // Close menu after clicking category
+                onClick={() => setIsMenuOpen(false)} 
               >
                 <span className="mr-2 text-yellow-500">•</span>{cat.name}
               </Link>
@@ -297,7 +296,7 @@ const Header = () => {
                 <div 
                     className="absolute right-0 mt-3 w-80 bg-white rounded-md shadow-lg py-3 z-50 border border-stone-200"
                     onMouseEnter={() => {
-                      if (hoverTimeout.current) clearTimeout(hoverTimeout.current); // Keep open if mouse re-enters dropdown
+                      if (hoverTimeout.current) clearTimeout(hoverTimeout.current); 
                     }}
                 >
                     <div className="px-4 pb-2 border-b border-gray-200">
